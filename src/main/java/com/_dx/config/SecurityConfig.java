@@ -1,6 +1,5 @@
 package com._dx.config;
 
-import com._dx.security.JwtAuthenticationFilter;
 import com._dx.util.JwtUtil;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,26 +16,18 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 public class SecurityConfig {
 
-    private final JwtUtil jwtUtil;
-    private final UserDetailsService userDetailsService;
 
-    public SecurityConfig(JwtUtil jwtUtil, UserDetailsService userDetailsService) {
-        this.jwtUtil = jwtUtil;
-        this.userDetailsService = userDetailsService;
-    }
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(AbstractHttpConfigurer::disable) // ✅ 최신 방식 적용
+                .csrf(csrf -> csrf.disable()) // ✅ 최신 방식 적용
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/auth/**").permitAll()
-                        .requestMatchers("/api/wig/**").authenticated()
+                        .requestMatchers("/api/auth/**").permitAll() // 로그인 & 회원가입 허용
+                        .requestMatchers("/api/wig/**").authenticated() // WIG API는 인증 필요
                         .anyRequest().authenticated()
                 )
-                .addFilterBefore(new JwtAuthenticationFilter(jwtUtil, userDetailsService),
-                        UsernamePasswordAuthenticationFilter.class)
-                .httpBasic(AbstractHttpConfigurer::disable); // ✅ 최신 방식 적용
+                .formLogin(form -> form.disable()); // ✅ 최신 방식 적용
 
         return http.build();
     }

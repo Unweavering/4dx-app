@@ -24,3 +24,4 @@ public class WigGoal {
     @JoinColumn(name = "user_id")
     private User user;
 }
+
