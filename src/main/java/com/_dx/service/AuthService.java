@@ -15,7 +15,7 @@ public class AuthService {
 
     private final UserRepository userRepository;
     private final JwtUtil jwtUtil;
-    private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    private final PasswordEncoder passwordEncoder;
 
     public String signup(String username, String password) {
         if (userRepository.findByUsername(username).isPresent()) {

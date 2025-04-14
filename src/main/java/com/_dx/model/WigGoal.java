@@ -8,7 +8,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
+/*@AllArgsConstructor*/
 @Entity
 @Table(name = "wig_goals")
 public class WigGoal {
