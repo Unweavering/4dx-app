@@ -27,8 +27,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         String authHeader = request.getHeader("Authorization");
         if (authHeader != null && authHeader.startsWith("Bearer ")) {
-            String token = authHeader.substring(7);
-            String username = jwtUtil.validateToken(token);
+            String token = authHeader.substring(7);  //Bearer 부분 제거
+            String username = jwtUtil.validateToken(token);  // null반환이면 토큰이 유효하지 않음
 
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 UserDetails userDetails = userDetailsService.loadUserByUsername(username);

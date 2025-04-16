@@ -32,7 +32,7 @@ public class SecurityConfig {
                 .map(user -> User.builder()
                         .username(user.getUsername())
                         .password(user.getPassword())
-                        .roles("USER") // 혹은 DB에서 role 가져오게 수정
+                        .roles("USER")
                         .build())
                 .orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
