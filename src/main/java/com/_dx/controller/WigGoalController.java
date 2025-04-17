@@ -2,6 +2,7 @@ package com._dx.controller;
 
 import com._dx.model.WigGoal;
 import com._dx.service.WigGoalService;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@SecurityRequirement(name = "bearerAuth") // 🔐 Swagger가 이 API에 JWT를 붙이도록 지시
 @RestController
 @RequestMapping("/api/wig")
 @RequiredArgsConstructor
