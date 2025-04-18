@@ -22,9 +22,11 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<String> login(@RequestBody Map<String, String> request) {
+    public ResponseEntity<Map<String, String>> login(@RequestBody Map<String, String> request) {
         String username = request.get("username");
         String password = request.get("password");
-        return ResponseEntity.ok(authService.login(username, password));
+        String token = authService.login(username, password);
+
+        return ResponseEntity.ok(Map.of("token", token));
     }
 }
