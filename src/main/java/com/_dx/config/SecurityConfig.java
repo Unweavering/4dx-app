@@ -64,6 +64,7 @@ public class SecurityConfig {
                                 "/swagger-resources/**"      // ✅ Swagger 설정용 엔드포인트
                         ).permitAll()
                         .requestMatchers("/api/wig/**").authenticated()
+                        .requestMatchers("/api/lead-measures/**").authenticated()
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
