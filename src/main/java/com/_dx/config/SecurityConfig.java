@@ -65,7 +65,7 @@ public class SecurityConfig {
                         ).permitAll()
                         .requestMatchers("/api/wig/**").authenticated()
                         .requestMatchers("/api/lead-measures/**").authenticated()
-                        .anyRequest().authenticated()
+                        .anyRequest().denyAll()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .formLogin(AbstractHttpConfigurer::disable);
