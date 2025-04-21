@@ -1,8 +1,12 @@
 package com._dx.controller;
 
-import com._dx.model.WigGoal;
+import com._dx.dto.wig.WigGoalRequest;
+import com._dx.dto.wig.WigGoalResponse;
+import com._dx.dto.wig.WigGoalUpdateRequest;
+import com._dx.dto.common.MessageResponse;
 import com._dx.service.WigGoalService;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,36 +22,38 @@ public class WigGoalController {
 
     private final WigGoalService wigGoalService;
 
-    // 현재 로그인된 사용자의 username을 SecurityContext에서 가져오는 메서드
     private String getCurrentUsername() {
         return SecurityContextHolder.getContext().getAuthentication().getName();
     }
 
     @PostMapping
-    public ResponseEntity<WigGoal> createWigGoal(@RequestBody WigGoal wigGoal) {
+    public ResponseEntity<WigGoalResponse> createWigGoal(@RequestBody @Valid WigGoalRequest request) {
         String username = getCurrentUsername();
-        WigGoal created = wigGoalService.createWigGoal(username, wigGoal);
+        WigGoalResponse created = wigGoalService.createWigGoal(username, request);
         return ResponseEntity.ok(created);
     }
 
     @GetMapping
-    public ResponseEntity<List<WigGoal>> getWigGoals() {
+    public ResponseEntity<List<WigGoalResponse>> getWigGoals() {
         String username = getCurrentUsername();
-        List<WigGoal> goals = wigGoalService.getWigGoals(username);
+        List<WigGoalResponse> goals = wigGoalService.getWigGoals(username);
         return ResponseEntity.ok(goals);
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<WigGoal> updateWigGoal(@PathVariable Long id, @RequestBody WigGoal updatedGoal) {
+    public ResponseEntity<WigGoalResponse> updateWigGoal(
+            @PathVariable Long id,
+            @RequestBody @Valid WigGoalUpdateRequest request
+    ) {
         String username = getCurrentUsername();
-        WigGoal updated = wigGoalService.updateWigGoal(username, id, updatedGoal);
+        WigGoalResponse updated = wigGoalService.updateWigGoal(username, id, request);
         return ResponseEntity.ok(updated);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteWigGoal(@PathVariable Long id) {
+    public ResponseEntity<MessageResponse> deleteWigGoal(@PathVariable Long id) {
         String username = getCurrentUsername();
         wigGoalService.deleteWigGoal(username, id);
-        return ResponseEntity.ok("Deleted");
+        return ResponseEntity.ok(new MessageResponse("WIG 목표가 삭제되었습니다."));
     }
 }
