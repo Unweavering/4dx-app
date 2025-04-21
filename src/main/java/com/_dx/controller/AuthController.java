@@ -1,6 +1,11 @@
 package com._dx.controller;
 
+import com._dx.dto.auth.AuthResponse;
+import com._dx.dto.auth.LoginRequest;
+import com._dx.dto.auth.SignupRequest;
+import com._dx.dto.common.MessageResponse;
 import com._dx.service.AuthService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -15,18 +20,14 @@ public class AuthController {
     private final AuthService authService;
 
     @PostMapping("/signup")
-    public ResponseEntity<String> signup(@RequestBody Map<String, String> request) {
-        String username = request.get("username");
-        String password = request.get("password");
-        return ResponseEntity.ok(authService.signup(username, password));
+    public ResponseEntity<MessageResponse> signup(@RequestBody @Valid SignupRequest request) {
+        return ResponseEntity.ok(authService.signup(request));
     }
 
-    @PostMapping("/login")
-    public ResponseEntity<Map<String, String>> login(@RequestBody Map<String, String> request) {
-        String username = request.get("username");
-        String password = request.get("password");
-        String token = authService.login(username, password);
 
-        return ResponseEntity.ok(Map.of("token", token));
+    @PostMapping("/login")
+    public ResponseEntity<AuthResponse> login(@RequestBody @Valid LoginRequest request) {
+        String token = authService.login(request);
+        return ResponseEntity.ok(new AuthResponse(token));
     }
 }
